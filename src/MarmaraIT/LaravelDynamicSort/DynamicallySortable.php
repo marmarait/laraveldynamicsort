@@ -2,7 +2,16 @@
 
 namespace MarmaraIT\LaravelDynamicSort;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 
+/**
+ * Class DynamicallySortable
+ * @property string primarykey
+ * @method string getTable()
+ * @method static Builder ordered()
+ * @method static Builder sorted()
+ * @package MarmaraIT\LaravelDynamicSort
+ */
 trait DynamicallySortable{
     /**
      * Sorts the Model according to the request
@@ -11,24 +20,27 @@ trait DynamicallySortable{
      */
     public function scopeOrdered(Builder $query){
         $request = request();
-        $dir=$request->get('sort_dir', (isset($this->defaultDir) ? $this->defaultDir : 'asc'));
-        $dir=$dir?:(isset($this->defaultDir) ? $this->defaultDir : 'asc');
 
-        $sort=$request->get('sort', (isset($this->defaultSort) ? $this->defaultSort : $this->getTable().'.id'));
-        $sort=$sort?:(isset($this->defaultSort) ? $this->defaultSort : $this->getTable().'.'.'id');
+        $dir=$this->getDir($request);
+
+        $sort=$this->getSortString($request);
+
+        //Make an array, if multiple columns seperated by comma
         if(is_string($sort) && str_contains($sort, ',')){
             $sort=explode(',', $sort);
         }
 
+        //first order by the given value next by primary key to avoid randomness on same values
         if(is_array($sort)){
             foreach($sort as $sortitem){
                 $query->orderBy($sortitem);
             }
-            $query->orderBy($this->getTable().'.id', $dir);
+            $query->orderBy($this->getTable().'.'.$this->primarykey, $dir);
         }else{
-            $query->orderBy($sort, $dir)->orderBy($this->getTable().'.id', $dir);
+            $query->orderBy($sort, $dir)->orderBy($this->getTable().'.'.$this->primarykey, $dir);
         }
 
+        //Add the sort variables to the request instance to get it in the view
         if(!$request->has('sort')){
             if(is_array($sort)){
                 $sort=join(',', $sort);
@@ -48,6 +60,35 @@ trait DynamicallySortable{
      * @return Builder
      */
     public function scopeSorted(Builder $query){
+        /** @var DynamicallySortable $query */
         return $query->ordered();
+    }
+
+    /**
+     * Returns the direction for sorting
+     * @param $request
+     * @return string
+     */
+    private function getDir(Request $request){
+        if(!$request){
+            return (isset($this->defaultDir) ? $this->defaultDir : 'asc');
+        }
+        $dir=$request->get('sort_dir', (isset($this->defaultDir) ? $this->defaultDir : 'asc'));
+        $dir=$dir ? : (isset($this->defaultDir) ? $this->defaultDir : 'asc');
+        return $dir;
+    }
+
+    /**
+     * Returns the given sort string
+     * @param $request
+     * @return string
+     */
+    private function getSortString(Request $request){
+        if(!$request){
+            return (isset($this->defaultSort) ? $this->defaultSort : $this->getTable().'.'.$this->primarykey);
+        }
+        $sort=$request->get('sort', (isset($this->defaultSort) ? $this->defaultSort : $this->getTable().'.'.$this->primarykey));
+        $sort=$sort ? : (isset($this->defaultSort) ? $this->defaultSort : $this->getTable().'.'.$this->primarykey);
+        return $sort;
     }
 }
