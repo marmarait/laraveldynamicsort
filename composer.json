@@ -9,6 +9,5 @@
             "email": "romeo.semper@marmara.at"
         }
     ],
-    "minimum-stability": "stable",
     "require": {}
 }
