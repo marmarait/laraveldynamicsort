@@ -24,5 +24,13 @@
                 "MarmaraIT\\LaravelDynamicSort\\DynamicallySortableProvider"
             ]
         }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "php artisan vendor:publish --provider=MarmaraIT\\LaravelDynamicSort\\DynamicallySortableProvider --force"
+        ],
+        "post-update-cmd": [
+            "php artisan vendor:publish --provider=MarmaraIT\\LaravelDynamicSort\\DynamicallySortableProvider --force"
+        ]
     }
 }
