@@ -1,0 +1,14 @@
+{
+    "name": "marmarait/laravel-dynamic-sort",
+    "description": "Lets you sort your Models dynamically by querystring",
+    "type": "libary",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Romeo Semper",
+            "email": "romeo.semper@marmara.at"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
