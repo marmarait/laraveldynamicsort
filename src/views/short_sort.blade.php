@@ -1,0 +1,2 @@
+<meta name="sortdir" content="{{ request()->get('sort_dir', '') }}">
+<meta name="sort" content="{{ isset($sort)?$sort:(is_array(request()->get('sort', ''))?join(',', request()->get('sort', '')):request()->get('sort', '')) }}">
