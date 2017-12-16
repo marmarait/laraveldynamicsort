@@ -1,5 +1,5 @@
 {
-    "name": "marmarait/laravel-dynamic-sort",
+    "name": "marmarait/laraveldynamicsort",
     "description": "Lets you sort your Models dynamically by querystring",
     "type": "libary",
     "license": "MIT",
