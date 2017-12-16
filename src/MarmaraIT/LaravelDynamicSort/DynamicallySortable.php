@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 /**
  * Class DynamicallySortable
- * @property string primarykey
+ * @property string primaryKey
  * @method string getTable()
  * @method static Builder ordered()
  * @method static Builder sorted()
@@ -20,7 +20,6 @@ trait DynamicallySortable{
      */
     public function scopeOrdered(Builder $query){
         $request = request();
-
         $dir=$this->getDir($request);
 
         $sort=$this->getSortString($request);
@@ -35,9 +34,9 @@ trait DynamicallySortable{
             foreach($sort as $sortitem){
                 $query->orderBy($sortitem);
             }
-            $query->orderBy($this->getTable().'.'.$this->primarykey, $dir);
+            $query->orderBy($this->getTable().'.'.$this->primaryKey, $dir);
         }else{
-            $query->orderBy($sort, $dir)->orderBy($this->getTable().'.'.$this->primarykey, $dir);
+            $query->orderBy($sort, $dir)->orderBy($this->getTable().'.'.$this->primaryKey, $dir);
         }
 
         //Add the sort variables to the request instance to get it in the view
@@ -85,10 +84,10 @@ trait DynamicallySortable{
      */
     private function getSortString(Request $request){
         if(!$request){
-            return (isset($this->defaultSort) ? $this->defaultSort : $this->getTable().'.'.$this->primarykey);
+            return (isset($this->defaultSort) ? $this->defaultSort : $this->getTable().'.'.$this->primaryKey);
         }
-        $sort=$request->get('sort', (isset($this->defaultSort) ? $this->defaultSort : $this->getTable().'.'.$this->primarykey));
-        $sort=$sort ? : (isset($this->defaultSort) ? $this->defaultSort : $this->getTable().'.'.$this->primarykey);
+        $sort=$request->get('sort', (isset($this->defaultSort) ? $this->defaultSort : $this->getTable().'.'.$this->primaryKey));
+        $sort=$sort ? : (isset($this->defaultSort) ? $this->defaultSort : $this->getTable().'.'.$this->primaryKey);
         return $sort;
     }
 }
