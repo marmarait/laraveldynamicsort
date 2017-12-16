@@ -9,5 +9,13 @@
             "email": "romeo.semper@marmara.at"
         }
     ],
+    "autoload": {
+        "classmap": [
+            "src/MarmaraIT/LaravelDynamicSort"
+        ],
+        "psr-0": {
+            "MarmaraIT\\LaravelDynamicSort\\": "src/"
+        }
+    },
     "require": {}
 }
