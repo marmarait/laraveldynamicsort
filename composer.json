@@ -17,5 +17,12 @@
             "MarmaraIT\\LaravelDynamicSort\\": "src/"
         }
     },
-    "require": {}
+    "require": {},
+    "extra": {
+        "laravel": {
+            "providers": [
+                "MarmaraIT\\LaravelDynamicSort\\DynamicallySortableProvider"
+            ]
+        }
+    }
 }
