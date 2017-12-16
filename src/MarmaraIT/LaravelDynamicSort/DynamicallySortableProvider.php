@@ -14,6 +14,9 @@ class DynamicallySortableProvider extends ServiceProvider
     public function boot()
     {
         $this->loadViewsFrom(__DIR__.'/views', 'laraveldynamicsort');
+        $this->publishes([
+            __DIR__.'/assets' => resource_path('/assets/laraveldynamicsort'),
+        ]);
     }
 
     /**
