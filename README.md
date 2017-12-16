@@ -6,7 +6,7 @@ Simply sort your Models by using querystring parameters.
 `composer require marmarait/laraveldynamicsort`
 
 ### Optionally you can also add the jQuery Plugin provided to do the frontend part.
-`php artisan vendor:publish --provider=MarmaraIT\\LaravelDynamicSort\\DynamicallySortableProvider`
+`php artisan vendor:publish --provider=MarmaraIT\LaravelDynamicSort\DynamicallySortableProvider`
 
 Somewhere in the <head> part of your layout add 
 
@@ -23,7 +23,7 @@ Backend:
 * use the scope "ordered" on the model to sort it by querystring:
 * add sort=COLUMNAME&dir=[[asc/desc]] to your query string to sort the active model
 
-To use the jquery-plugin give the table header elements the attribute data-sort="COLUMNAME" and call the plugin $('.selector').dynamicallySortable()
+To use the jquery-plugin, give the table header(th) elements the attribute data-sort="COLUMNAME" and call the plugin $('.selector').dynamicallySortable() (selector = the th elements; f.e. $('th[data-sort]') )
 
 ## Defaults
 Set the defaultDir property on your model to define the default order direction (asc/desc)  
