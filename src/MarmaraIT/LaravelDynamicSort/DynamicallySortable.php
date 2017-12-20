@@ -32,7 +32,7 @@ trait DynamicallySortable{
         //first order by the given value next by primary key to avoid randomness on same values
         if(is_array($sort)){
             foreach($sort as $sortitem){
-                $query->orderBy($sortitem);
+                $query->orderBy($sortitem, $dir);
             }
             $query->orderBy($this->getTable().'.'.$this->primaryKey, $dir);
         }else{
