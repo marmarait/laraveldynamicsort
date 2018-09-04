@@ -53,6 +53,22 @@ trait DynamicallySortable{
             }
             $query->orderBy($this->getTable().'.'.$this->primaryKey, $dir);
         }else{
+            if(str_contains($sort, '.')){
+                //if the table is not the table from the model
+                if(($tablename=explode('.', $sort)[0])!=$this->getTable()){
+                    //if the other table is not joint yet
+                    if(!collect($query->getQuery()->joins)->pluck('table')->contains($tablename)){
+                        //try to join automatically
+                        //check if there is a field for a belongsto relation
+                        if(($model=self::first())&&in_array(str_singular($tablename).'_id', array_keys($model->getAttributes()))){
+                            $query->leftJoin($tablename, $this->getTable().'.'.str_singular($tablename).'_id', '=', $tablename.'.id');
+                        }else{
+                            // assume a "HasMany" relation
+                            $query->leftJoin($tablename, $tablename.'.'.$this->getForeignKey(), '=', $this->getTable().'.'.$this->primaryKey);
+                        }
+                    }
+                }
+            }
             $query->orderBy($sort, $dir)->orderBy($this->getTable().'.'.$this->primaryKey, $dir);
         }
 
