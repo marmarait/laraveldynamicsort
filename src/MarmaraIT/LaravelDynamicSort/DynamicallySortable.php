@@ -32,6 +32,17 @@ trait DynamicallySortable{
         //first order by the given value next by primary key to avoid randomness on same values
         if(is_array($sort)){
             foreach($sort as $sortitem){
+                // If sorted by a specific tables
+                if(str_contains($sortitem, '.')){
+                    //if the table is not the table from the model
+                    if(($tablename=explode('.', $sortitem)[0])!=$this->getTable()){
+                        //if the other table is not joint yet
+                        if(!collect($query->getQuery()->joins)->pluck('table')->contains($tablename)){
+                            //try to join automatically -- assume a "HasMany" relation
+                            $query->leftJoin($tablename, $tablename.'.'.$this->getForeignKey(), '=', $this->getTable().'.'.$this->primaryKey);
+                        }
+                    }
+                }
                 $query->orderBy($sortitem, $dir);
             }
             $query->orderBy($this->getTable().'.'.$this->primaryKey, $dir);
