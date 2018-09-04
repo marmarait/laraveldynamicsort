@@ -38,8 +38,14 @@ trait DynamicallySortable{
                     if(($tablename=explode('.', $sortitem)[0])!=$this->getTable()){
                         //if the other table is not joint yet
                         if(!collect($query->getQuery()->joins)->pluck('table')->contains($tablename)){
-                            //try to join automatically -- assume a "HasMany" relation
-                            $query->leftJoin($tablename, $tablename.'.'.$this->getForeignKey(), '=', $this->getTable().'.'.$this->primaryKey);
+                            //try to join automatically
+                            //check if there is a field for a belongsto relation
+                            if(($model=self::first())&&in_array(str_singular($tablename).'_id', array_keys($model->getAttributes()))){
+                                $query->leftJoin($tablename, $this->getTable().'.'.str_singular($tablename).'_id', '=', $tablename.'.id');
+                            }else{
+                                // assume a "HasMany" relation
+                                $query->leftJoin($tablename, $tablename.'.'.$this->getForeignKey(), '=', $this->getTable().'.'.$this->primaryKey);
+                            }
                         }
                     }
                 }
